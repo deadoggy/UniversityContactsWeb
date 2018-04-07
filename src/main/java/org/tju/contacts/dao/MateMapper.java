@@ -5,7 +5,7 @@ import org.tju.contacts.entity.Mate;
 import java.util.List;
 
 public interface MateMapper {
-    List<Mate> selectMates(String id, String name, String province, String city, String district, String company);
+    List<Mate> selectMates(Mate mate);
     int insertMate(Mate mate);
-    int updateMate(String name, String province, String city, String district, String company);
+    int updateMate(Mate mate);
 }

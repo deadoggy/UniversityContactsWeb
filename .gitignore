@@ -1,4 +1,5 @@
 target/*
+classes/*
 out/*
 .idea/*
 Contacts.iml

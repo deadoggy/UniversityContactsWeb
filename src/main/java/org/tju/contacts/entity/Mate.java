@@ -9,7 +9,16 @@ public class Mate {
     private String district;
     private String company;
 
-    public Mate( String id, String name, String province, String city, String district, String company) {
+    public Mate() {
+        name = null;
+        id = null;
+        province = null;
+        city = null;
+        district = null;
+        company = null;
+    }
+
+    public Mate(String id, String name, String province, String city, String district, String company) {
         this.name = name;
         this.id = id;
         this.province = province;

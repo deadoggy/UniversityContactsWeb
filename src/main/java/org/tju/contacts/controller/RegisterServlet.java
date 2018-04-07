@@ -39,7 +39,7 @@ public class RegisterServlet extends HttpServlet {
         Boolean exists = false;
         try(SqlSession session = SessionFactory.getInstance().openSession()){
             MateMapper mapper = session.getMapper(MateMapper.class);
-            if(mapper.selectMates(id, null, null, null, null, null).size()!=0){
+            if(mapper.selectMates(new Mate(id, null, null, null, null, null)).size()!=0){
                 exists=true;
             }else{
                 mapper.insertMate(new Mate(id, name, province, city, district, company));

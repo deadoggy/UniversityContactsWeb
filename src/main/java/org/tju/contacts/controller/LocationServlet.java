@@ -19,7 +19,7 @@ public class LocationServlet extends HttpServlet{
         List<Mate> mates;
         try(SqlSession session = SessionFactory.getInstance().openSession()){
             MateMapper mapper = session.getMapper(MateMapper.class);
-            mates = mapper.selectMates(null,null, null, null, null,null);
+            mates = mapper.selectMates(new Mate());
         }
         JSONObject retObj = new JSONObject();
         retObj.put("ret", 1);
@@ -29,6 +29,7 @@ public class LocationServlet extends HttpServlet{
         }
         retObj.put("list", locationJsonArray);
 
+        response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
         out.print(retObj.toJSONString());
     }
