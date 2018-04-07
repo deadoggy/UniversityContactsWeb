@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.tju.contacts.dao.MateMapper">
-    <select id="selectMates" resultMap="Mate">
+
+    <select id="selectMates" parameterType="org.tju.contacts.entity.Mate" resultType="org.tju.contacts.entity.Mate">
         SELECT * FROM t_mate
         <where>
             <if test="id!=null">id=#{id}</if>
@@ -13,11 +14,11 @@
             <if test="company!=null">AND company=#{company}</if>
         </where>
     </select>
-    <insert id="insertMate" parameterType="Mate">
+    <insert id="insertMate" parameterType="org.tju.contacts.entity.Mate">
         INSERT INTO t_mate
         VALUES (#{id}, #{name}, #{province}, #{city}, #{district}, #{company})
     </insert>
-    <update id="updateMate">
+    <update id="updateMate" parameterType="org.tju.contacts.entity.Mate">
         UPDATE t_mate SET
           <set>
               <if test="name!=null">name=#{name},</if>

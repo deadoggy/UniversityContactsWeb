@@ -3,21 +3,18 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-    <typeAliases>
-        <typeAlias type="org/tju/contacts/entity/Mate" alias="Mate"/>
-    </typeAliases>
     <environments default="development">
         <environment id="development">
             <transactionManager type="JDBC"/>
             <dataSource type="POOLED">
                 <property name="driver" value="com.mysql.jdbc.Driver"/>
-                <property name="url" value="jdbc:mysql://localhost:3306:contacts"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/contacts?useUnicode=true&amp;characterEncoding=UTF-8"/>
                 <property name="username" value="contacts"/>
                 <property name="password" value="123456"/>
             </dataSource>
         </environment>
     </environments>
     <mappers>
-        <mapper resource="org/tju/contacts/dao/MateMapper.xml"/>
+        <mapper resource="MateMapper.xml"/>
     </mappers>
 </configuration>
