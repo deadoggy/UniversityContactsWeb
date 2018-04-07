@@ -14,7 +14,7 @@ import java.io.PrintWriter;
 import java.util.List;
 
 public class LocationServlet extends HttpServlet{
-    
+
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         List<Mate> mates;
         try(SqlSession session = SessionFactory.getInstance().openSession()){
