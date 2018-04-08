@@ -21,24 +21,22 @@
         }
 
         #sidebar{
-            height: 850px;
+            height: 830px;
             background-color: #e0e0e0;
         }
         #map{
-            height: 850px;
+            height: 830px;
         }
     </style>
 </head>
-<body>
+<body style="background-color: #313131">
     <div id="navigation" >
-        <h3><span class="h3" style="color: white; margin-left: 150px">校友录</span></h3>
+        <h3><span class="h3" style="color: white; margin-left: 50px; background-color: #313131">校友录</span></h3>
     </div>
     <div id="main">
-        <div id="sidebar" class="col-md-2">
-            <div id="checkin">
-                <button id="check-button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#checkinModel">
-                    Check In
-                </button>
+        <div id="sidebar" class="col-md-2" style="background-color: #222222">
+            <div class="list-group" style="margin-top: 50px;">
+                <a class="list-group-item panel-body col-md-12" data-toggle="modal" data-target="#checkinModel">签到</a>
                 <div id="checkinModel" class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
@@ -47,20 +45,20 @@
                                 <h4 class="modal-title" id="myModalLabel">签到</h4>
                             </div>
                             <div class="modal-body">
-                                <ul>
-                                    <li>
+                                <ul class="list-group">
+                                    <li class="list-group-item">
                                         <div class="col-md-3" style="text-align: center; padding-top: 5px"><strong>姓名</strong></div>
                                         <div class="input-group col-md-9">
                                             <input type="text" id="checkin-name" class="form-control" placeholder="请输入姓名" aria-describedby="basic-addon1">
                                         </div>
                                     </li>
-                                    <li>
+                                    <li class="list-group-item">
                                         <div class="col-md-3" style="text-align: center; padding-top: 5px"><strong>学号</strong></div>
                                         <div class="input-group col-md-9">
                                             <input type="text" id="checkin-id" class="form-control" placeholder="请输入学号" aria-describedby="basic-addon1">
                                         </div>
                                     </li>
-                                    <li>
+                                    <li class="list-group-item">
                                         <div class="col-md-3" style="text-align: center; padding-top: 5px"><strong>常住地</strong></div>
                                         <div class="input-group col-md-9">
                                             <div class="dropdown col-md-4">
@@ -87,7 +85,7 @@
                                             </div>
                                         </div>
                                     </li>
-                                    <li>
+                                    <li class="list-group-item">
                                         <div class="col-md-3" style="text-align: center; padding-top: 5px"><strong>单位</strong></div>
                                         <div class="input-group col-md-9">
                                             <input type="text" id="checkin-company" class="form-control" placeholder="请输入单位" aria-describedby="basic-addon1">
@@ -102,41 +100,63 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div id="search">
-                <div id="input">
-                    <div>
-                        <span class="col-md-3">省:</span>
-                        <div class="dropdown col-md-9">
-                            <button class="btn btn-default dropdown-toggle col-md-12" type="button" id="search-province" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                <span id="search-province-choice">--请选择--</span>
-                            </button>
-                            <ul id="search-province-ul" class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                            </ul>
-                        </div>
-                        <span class="col-md-3">市:</span>
-                        <div class="dropdown col-md-9">
-                            <button class="btn btn-default dropdown-toggle col-md-12" type="button" id="search-city" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                <span id="search-city-choice">--请选择--</span>
-                            </button>
-                            <ul id="search-city-ul" class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                <a class="list-group-item panel-body col-md-12" data-toggle="modal" data-target="#searchModel">按地区搜索</a>
+                <div id="searchModel" class="modal fade"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <h4 class="modal-title" id="searchModalLabel">按地区搜索</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div id="input">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">
+                                            <div class="col-md-3"><span><strong>省:</strong></span></div>
+                                            <div class="input-group dropdown col-md-9">
+                                                <button class="btn btn-default dropdown-toggle" type="button" id="search-province" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                    <span id="search-province-choice">--请选择--</span>
+                                                </button>
+                                                <ul id="search-province-ul" class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                                </ul>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <div class="col-md-3"><span><strong>市:</strong></span></div>
+                                            <div class="input-group dropdown col-md-9">
+                                                <button class="btn btn-default dropdown-toggle" type="button" id="search-city" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                    <span id="search-city-choice">--请选择--</span>
+                                                </button>
+                                                <ul id="search-city-ul" class="dropdown-menu" aria-labelledby="dropdownMenu2">
 
-                            </ul>
-                        </div>
-                        <span class="col-md-3">区:</span>
-                        <div class="dropdown col-md-9">
-                            <button class="btn btn-default dropdown-toggle col-md-12" type="button" id="search-district" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                <span id="search-district-choice">--请选择--</span>
-                            </button>
-                            <ul id="search-district-ul" class="dropdown-menu" aria-labelledby="dropdownMenu3">
+                                                </ul>
+                                            </div>
+                                        </li>
+                                        <li class="list-group-item">
+                                            <div class="col-md-3"><span><strong>区:</strong></span></div>
+                                            <div class="input-group dropdown col-md-9">
+                                                <button class="btn btn-default dropdown-toggle" type="button" id="search-district" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                    <span id="search-district-choice">--请选择--</span>
+                                                </button>
+                                                <ul id="search-district-ul" class="dropdown-menu" aria-labelledby="dropdownMenu3">
 
-                            </ul>
+                                                </ul>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                                <button type="button" class="btn btn-primary">搜索</button>
+                            </div>
                         </div>
-                    </div>
-                    <div>
-                        <span class="btn btn-default" id="search-confirm">搜索</span>
                     </div>
                 </div>
+            </div>
+            <div id="search">
+
+
             </div>
             <div id="content">
 

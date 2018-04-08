@@ -1,8 +1,9 @@
 //初始化地图
 var map = new AMap.Map('map', {
     resizeEnable: true,
-    zoom:11,
-    center: [116.397428, 39.90923]
+    zoom:5,
+    center: [116.397428, 39.90923],
+    mapStyle: 'amap://styles/light'
 });
 
 //TODO：绘制地图上的标记
@@ -22,7 +23,7 @@ district.search('中国', function(status, result) {
 //加载下一个行政区的列表
 function districtSelectChange(labelPrefix, level, adcode){
     district.setLevel(level); //行政区级别
-    district.setExtensions('all');
+    district.setExtensions('all');mapStyle: 'amap://styles/模版样式的英文名'
     //行政区查询
     //按照adcode进行查询可以保证数据返回的唯一性
     district.search(adcode, function(status, result) {
