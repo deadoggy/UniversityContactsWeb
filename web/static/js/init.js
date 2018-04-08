@@ -15,15 +15,13 @@ district = new AMap.DistrictSearch(opts);//注意：需要使用插件同步下�
 district.search('中国', function(status, result) {
     if(status=='complete'){
         refreshDistrictSelect('search', result.districtList[0]);
+        refreshDistrictSelect('checkin', result.districtList[0]);
     }
 });
 
 //加载下一个行政区的列表
-function districtSelectChange(labelPrefix, obj){
-    var option = obj[obj.options.selectedIndex];
-    var keyword = option.text; //关键字
-    var adcode = option.adcode;
-    district.setLevel(option.value); //行政区级别
+function districtSelectChange(labelPrefix, level, adcode){
+    district.setLevel(level); //行政区级别
     district.setExtensions('all');
     //行政区查询
     //按照adcode进行查询可以保证数据返回的唯一性
@@ -36,22 +34,26 @@ function districtSelectChange(labelPrefix, obj){
 
 //搜索
 function search(){
-    var provinceSelect = document.getElementById('search-province');
-    var citySelect = document.getElementById('search-city');
-    var districtSelect = document.getElementById('search-district');
 
-    var province = provinceSelect[provinceSelect.options.selectedIndex];
-    var city = citySelect[citySelect.options.selectedIndex];
-    var district = districtSelect[districtSelect.options.selectedIndex];
+    var province = $('search-province-choice').text();
+    var city = $('search-city-choice').text();
+    var district = $('search-district-choice').text();
 
-    var body = {
-        province: province,
-        city: city,
-        district: district
-    };
+    var body = {};
+
+    if(province.indexOf('--')==-1){
+        body.province = province;
+    }
+    if(city.indexOf('--')==-1){
+        body.city = city;
+    }
+    if(district.indexOf('--')==-1){
+        body.district = district;
+    }
 
     var ret = post("/location", body)
 }
+
 
 $("#search-province").bind('change',function(obj){
    districtSelectChange('search', this);

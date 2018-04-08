@@ -1,36 +1,47 @@
+function chooseItem(labelPrefix, level, obj){
+    var p = document.getElementById(labelPrefix+"-" + level + "-choice");
+    p.innerText = obj.innerText;
+    p.setAttribute("value", obj.getAttribute('adcode'));
+    p.setAttribute("level", level);
+    districtSelectChange(labelPrefix, level, obj.getAttribute('adcode'))
+}
+
 function refreshDistrictSelect(labelPrefix, data){
     var level = data['level'];
-    var provinceSelect = document.getElementById(labelPrefix+"-province");
-    var citySelect = document.getElementById(labelPrefix+"-city");
-    var districtSelect = document.getElementById(labelPrefix+"-district");
+    var provinceUl = document.getElementById(labelPrefix+"-province-ul");
+    var cityUl = document.getElementById(labelPrefix+"-city-ul");
+    var districtUl = document.getElementById(labelPrefix+"-district-ul");
 
     //清空下面级别的选项
     if(level=='country'){
-        provinceSelect.innerHTML="";
-        citySelect.innerHTML="";
-        districtSelect.innerHTML="";
+        provinceUl.innerHTML=""; $('#'+labelPrefix+"-province-choice").text('--请选择--');
+        cityUl.innerHTML=""; $('#'+labelPrefix+"-city-choice").text('--请选择--');
+        districtUl.innerHTML=""; $('#'+labelPrefix+"-district-choice").text('--请选择--');
     }else if(level=='province'){
-        citySelect.innerHTML="";
-        districtSelect.innerHTML="";
+        cityUl.innerHTML=""; $('#'+labelPrefix+"-city-choice").text('--请选择--');
+        districtUl.innerHTML=""; $('#'+labelPrefix+"-district-choice").text('--请选择--');
     }else if(level=='city'){
-        districtSelect.innerHTML="";
+        districtUl.innerHTML=""; $('#'+labelPrefix+"-district-choice").text('--请选择--');
     }
 
     var subList = data.districtList;
     if(subList){
-        var contentSub = new Option('--请选择--');
         var curlevel = subList[0].level;
-        var curList =  document.querySelector('#' + labelPrefix + "-" + curlevel);
-        curList.add(contentSub);
+        var curUl =  $("#" + labelPrefix+"-"+curlevel+"-"+"ul");
         for (var i = 0, l = subList.length; i < l; i++) {
             var name = subList[i].name;
             var levelSub = subList[i].level;
             var cityCode = subList[i].citycode;
-            contentSub = new Option(name);
-            contentSub.setAttribute("value", levelSub);
-            contentSub.center = subList[i].center;
-            contentSub.adcode = subList[i].adcode;
-            curList.add(contentSub);
+            contentSub = $('<li>',{
+                value:levelSub,
+                adcode: subList[i].adcode,
+                center: subList[i].center,
+                onclick:"chooseItem(\'"+labelPrefix+"\',\'"+levelSub+"\',"+"this)"
+            });
+            var atag=$('<a>',{ href: '#'});
+            atag.text(name);
+            contentSub.append(atag);
+            curUl.append(contentSub);
         }
     }
 
