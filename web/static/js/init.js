@@ -7,6 +7,7 @@ var map = new AMap.Map('map', {
 });
 
 //TODO：绘制地图上的标记
+
 //TODO：初始化搜索select
 var opts = {
     subdistrict: 1,   //返回下一级行政区

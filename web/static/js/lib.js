@@ -49,9 +49,51 @@ function refreshDistrictSelect(labelPrefix, data){
 }
 
 function post(url, body){
-    //TODO: 提交
+    var ret = {"ret": 0};
+    $.ajax({
+        url: "/location",
+        type: "post",
+        dataType: "json",
+        data: body,
+        success: function(data, status){
+            ret = eval(data);
+        },
+        error: function(request, message){
+            ret.message = message;
+        }
+    });
+    return ret;
 }
 
-function showSearchContent(){
-    //TODO: 展示搜索结果
+
+function draw(map, data){
+
+}
+
+/*
+* data:
+* [
+*   [id, name, province, city, district, company],
+*   ...
+* ]
+* */
+function showSearchContent(map, data){
+
+    var geocoder = new AMap.Geocoder({
+        city: "010", //城市，默认：“全国”
+        radius: 1000 //范围，默认：500
+    });
+
+    var ret = []
+    for(item in data){
+        var obj = {id:item.id, name: item.name, company:item.company}
+        geocoder.getLocation(item.province + item.city + item.district, function(status, result) {
+            if (status === 'complete' && result.info === 'OK') {
+                obj.lat = result.geocodes[0].location.getLat();
+                obj.lon = result.geocodes[0].location.getLng();
+            }
+        });
+        ret.append(obj);
+    }
+    draw(map, ret);
 }
