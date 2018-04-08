@@ -1,36 +1,61 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
     <link rel="stylesheet" type="text/css" href="static/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="static/css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" href="https://cache.amap.com/lbs/static/main1119.css"/>
     <script type="text/javascript" src="static/js/jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="static/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=LCd25qCWh1LuYjOlWVFpM79h8GlYboAN"></script>
+    <script src="https://cache.amap.com/lbs/static/es5.min.js"></script>
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.4&key=2ad240f226965377e872f1e4796c2010&plugin=AMap.DistrictSearch"></script>
+    <script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script>
     <title>通讯录</title>
-</head>
-<body style="background-color: #23527c">
-    <div id="main" style="width: 100%; height: 850px">
-        <div id="sidebar" style="width: 25%; height: 100%; float: left; background-color: #c4e3f3">
-            <div class="col-md-4">Name</div>
+    <style type="text/css">
+        #navigation {
+            width: 100%;
+        }
 
+        #sidebar{
+            height: 850px;
+            background-color: #e0e0e0;
+        }
+        #map{
+            height: 850px;
+        }
+    </style>
+</head>
+<body>
+    <div id="navigation" >
+        <h3><span class="h3" style="color: white; margin-left: 150px">校友录</span></h3>
+    </div>
+    <div id="main">
+        <div id="sidebar" class="col-md-2">
+            <div id="checkin">
+                <button id="check-button">Check In</button>
+            </div>
+            <div id="search">
+                <div id="input">
+                    <div>
+                        <span class="col-md-3">省:</span> <select class="col-md-9" id="search-province"></select>
+                        <span class="col-md-3">市:</span> <select class="col-md-9" id="search-city"></select>
+                        <span class="col-md-3">区:</span> <select class="col-md-9" id="search-district"></select>
+                    </div>
+                    <div>
+                        <span class="btn btn-default" id="search-confirm">搜索</span>
+                    </div>
+                </div>
+            </div>
+            <div id="content">
+
+            </div>
         </div>
-        <div id="allmap" style="width: 75%; height: 100%; float: right;"></div>
+        <div id="map" class="col-md-10"></div>
     </div>
 
 </body>
 </html>
-<script type="text/javascript">
-    // 百度地图API功能
-    var map = new BMap.Map("allmap");    // 创建Map实例
-    map.centerAndZoom(new BMap.Point(116.404, 39.915), 5);  // 初始化地图,设置中心点坐标和地图级别
-    //添加地图类型控件
-    map.addControl(new BMap.MapTypeControl({
-        mapTypes:[
-            BMAP_NORMAL_MAP,
-            BMAP_HYBRID_MAP
-        ]}));
-    map.setCurrentCity("北京");          // 设置地图显示的城市 此项是必须设置的
-    map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
-</script>
+<script type="text/javascript" src="static/js/lib.js"></script>
+<script type="text/javascript" src="static/js/init.js"></script>
