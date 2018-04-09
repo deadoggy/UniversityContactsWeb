@@ -1,10 +1,8 @@
 //初始化地图
 var map = Loca.create('map', {
-    viewMode: '3D',
-    pitch : 50,
     resizeEnable: true,
-    zoom:5,
-    center: [116.397428, 39.90923],
+    zoom:4,
+    center: [105.542201,34.21872],
     //mapStyle: 'amap://styles/fresh'
 });
 map.on('mapload', function() {
@@ -15,22 +13,15 @@ map.on('mapload', function() {
 });
 
 var layer = Loca.visualLayer({
+    eventSupport: true,
     container: map,
-    type: 'heatmap',
-    shape: 'district'
+    type: 'point',
+    shape: 'circle'
 });
 
-layer.setOptions({
-    mode: 'mean',
-    style: {
-        height: [0, 500000],
-        opacity: 0.9
-    }
-});
 
-//TODO：绘制地图上的标记
+showContent(layer, null);
 
-//TODO：初始化搜索select
 var opts = {
     subdistrict: 1,   //返回下一级行政区
     showbiz:false  //最后一级返回街道信息
@@ -56,6 +47,22 @@ function districtSelectChange(labelPrefix, level, adcode){
     });
 }
 
+function searchClean(){
+    $('#search-province-choice').text('--请选择--');
+    $('#search-city-choice').text('--请选择--');
+    $('#search-district-choice').text('--请选择--');
+    $('#search-result').html('空空如野~');
+}
+
+function checkinClean(){
+    $('#checkin-name').val('');
+    $('#checkin-id').val('');
+    $('#checkin-province-choice').text('--请选择--');
+    $('#checkin-city-choice').text('--请选择--');
+    $('#checkin-district-choice').text('--请选择--');
+    $('#checkin-company').val('');
+}
+
 //搜索
 function search(){
 
@@ -75,7 +82,45 @@ function search(){
         body.district = district;
     }
 
-    var ret = post("/location", body)
+
+
+
+    var geocoder = new AMap.Geocoder({
+        radius: 1000 //范围，默认：500
+    });
+
+    var location = body.province;
+    var zoom = 7;
+    if(body.hasOwnProperty('city')){
+        location +=body.city;
+        zoom = 8;
+    }
+    if(body.hasOwnProperty('district')&&body.province!='澳门特别行政区'){
+        location+=body.district;
+        zoom = 9;
+    }
+    geocoder.getLocation(location,
+        function(status, result){
+            console.log(result)
+            if (status === 'complete' && result.info === 'OK') {
+                map.getMap().setZoomAndCenter(zoom, [result.geocodes[0].location.getLng(),result.geocodes[0].location.getLat()]);
+
+            }
+        });
+    var result = post('/location', body).list;
+    var content = "";
+    for(person in result){
+        var city;
+        var district;
+        result[person].hasOwnProperty('city')? city= result[person].city:city='';
+        result[person].hasOwnProperty('district')? district= result[person].district:district='';
+        content += result[person].id + ' ' + result[person].name + ' '+ result[person].province+city+district + ' ' ;
+        if(result[person].hasOwnProperty('company')){
+            content+=result[person].company;
+        }
+        content += '<br/>';
+    }
+    $('#search-result').html(content);
 }
 
 
@@ -95,6 +140,10 @@ $('#search-confirm').bind('click', function(){
    search();
 });
 
+$('#search-clean').bind('click', function(){
+    searchClean();
+})
+
 $('#checkin-button').bind('click', function () {
     var name = $('#checkin-name').val();
     var id = $('#checkin-id').val();
@@ -103,8 +152,9 @@ $('#checkin-button').bind('click', function () {
     var district = $('#checkin-district-choice').text();
     var company = $('#checkin-company').val();
 
-    if(name==null || name==''  || province.indexOf('--')!=-1){
-        alert('请务必输入姓名和省份！');
+    if(name==null || name=='' || province.indexOf('--')!=-1){
+        alert('请务必输入姓名和常住地！');
+        return;
     }
 
     var body = {
@@ -133,6 +183,7 @@ $('#checkin-button').bind('click', function () {
         }
     }else{
         $('#checkin-cancel').trigger('click');
-        draw(layer, null);
+        checkinClean();
+        showContent(layer, null);
     }
 });
