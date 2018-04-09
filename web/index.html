@@ -11,6 +11,8 @@
     <script type="text/javascript" src="static/js/bootstrap.min.js"></script>
     <script src="https://cache.amap.com/lbs/static/es5.min.js"></script>
     <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.4&key=2ad240f226965377e872f1e4796c2010&plugin=AMap.DistrictSearch"></script>
+    <script type="text/javascript" src="//webapi.amap.com/loca?key=2ad240f226965377e872f1e4796c2010"></script>
+    <script type="text/javascript" src="http://a.amap.com/Loca/static/dist/jquery.min.js"></script>
     <script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script>
     <title>通讯录</title>
     <style type="text/css">
@@ -94,8 +96,8 @@
                                 </ul>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                                <button type="button" class="btn btn-primary">签到</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal" id="checkin-cancel">取消</button>
+                                <button type="button" class="btn btn-primary" id="checkin-button">签到</button>
                             </div>
                         </div>
                     </div>
@@ -147,8 +149,8 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                                <button type="button" class="btn btn-primary">搜索</button>
+                                <button type="button" class="btn btn-default" data-dismiss="modal" id="search-cancel">取消</button>
+                                <button type="button" class="btn btn-primary" id="search-confirm">搜索</button>
                             </div>
                         </div>
                     </div>

@@ -1,9 +1,31 @@
 //初始化地图
-var map = new AMap.Map('map', {
+var map = Loca.create('map', {
+    viewMode: '3D',
+    pitch : 50,
     resizeEnable: true,
     zoom:5,
     center: [116.397428, 39.90923],
-    mapStyle: 'amap://styles/light'
+    //mapStyle: 'amap://styles/fresh'
+});
+map.on('mapload', function() {
+    map.getMap().plugin(['AMap.ControlBar'], function () {
+        var controlBar = new AMap.ControlBar();
+        map.getMap().addControl(controlBar);
+    });
+});
+
+var layer = Loca.visualLayer({
+    container: map,
+    type: 'heatmap',
+    shape: 'district'
+});
+
+layer.setOptions({
+    mode: 'mean',
+    style: {
+        height: [0, 500000],
+        opacity: 0.9
+    }
 });
 
 //TODO：绘制地图上的标记
@@ -37,9 +59,9 @@ function districtSelectChange(labelPrefix, level, adcode){
 //搜索
 function search(){
 
-    var province = $('search-province-choice').text();
-    var city = $('search-city-choice').text();
-    var district = $('search-district-choice').text();
+    var province = $('#search-province-choice').text();
+    var city = $('#search-city-choice').text();
+    var district = $('#search-district-choice').text();
 
     var body = {};
 
@@ -71,4 +93,46 @@ $("#search-district").bind('change',function(obj){
 
 $('#search-confirm').bind('click', function(){
    search();
+});
+
+$('#checkin-button').bind('click', function () {
+    var name = $('#checkin-name').val();
+    var id = $('#checkin-id').val();
+    var province = $('#checkin-province-choice').text();
+    var city = $('#checkin-city-choice').text();
+    var district = $('#checkin-district-choice').text();
+    var company = $('#checkin-company').val();
+
+    if(name==null || name==''  || province.indexOf('--')!=-1){
+        alert('请务必输入姓名和省份！');
+    }
+
+    var body = {
+      name: name,
+      province: province
+    };
+
+    if(id!=null&&id!=''){
+        body.id=id;
+    }
+    if(city.indexOf('--')==-1){
+        body.city = city;
+    }
+    if(district.indexOf('--')==-1){
+        body.district = district;
+    }
+    if(company!=null&&company!=''){
+        body.company = company;
+    }
+    var ret = post('/register', body);
+    if(ret.ret == 0){
+        if(ret.reason.indexOf('id exist')!=-1){
+            alert('已经签到过了~');
+        }else{
+            alert('好像出了点问题...请稍后再试');
+        }
+    }else{
+        $('#checkin-cancel').trigger('click');
+        draw(layer, null);
+    }
 });

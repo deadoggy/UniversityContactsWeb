@@ -49,13 +49,15 @@ function refreshDistrictSelect(labelPrefix, data){
 }
 
 function post(url, body){
-    var ret = {"ret": 0};
+    var ret = {};
     $.ajax({
-        url: "/location",
+        url: url,
         type: "post",
+        async: false,
         dataType: "json",
-        data: body,
-        success: function(data, status){
+        contentType: "application/json; charset=UTF-8",
+        data: JSON.stringify(body),
+        success: function(data){
             ret = eval(data);
         },
         error: function(request, message){
@@ -66,8 +68,8 @@ function post(url, body){
 }
 
 
-function draw(map, data){
-
+function draw(layer, data){
+    var data = post('location', {}).list;
 }
 
 /*
@@ -77,7 +79,7 @@ function draw(map, data){
 *   ...
 * ]
 * */
-function showSearchContent(map, data){
+function showSearchContent(layer, data){
 
     var geocoder = new AMap.Geocoder({
         city: "010", //城市，默认：“全国”
@@ -86,14 +88,13 @@ function showSearchContent(map, data){
 
     var ret = []
     for(item in data){
-        var obj = {id:item.id, name: item.name, company:item.company}
+        var obj = {};
         geocoder.getLocation(item.province + item.city + item.district, function(status, result) {
             if (status === 'complete' && result.info === 'OK') {
-                obj.lat = result.geocodes[0].location.getLat();
-                obj.lon = result.geocodes[0].location.getLng();
+                obj.latlon = [result.geocodes[0].location.getLat(),result.geocodes[0].location.getLng()];
             }
         });
         ret.append(obj);
     }
-    draw(map, ret);
+    draw(layer, ret);
 }
