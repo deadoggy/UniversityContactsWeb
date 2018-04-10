@@ -3,7 +3,7 @@ package org.tju.contacts.entity;
 public class Mate {
 
     private String name;
-    private String id;
+    private String contact;
     private String province;
     private String city;
     private String district;
@@ -11,16 +11,16 @@ public class Mate {
 
     public Mate() {
         name = null;
-        id = null;
+        contact = null;
         province = null;
         city = null;
         district = null;
         company = null;
     }
 
-    public Mate(String id, String name, String province, String city, String district, String company) {
+    public Mate(String contact, String name, String province, String city, String district, String company) {
         this.name = name;
-        this.id = id;
+        this.contact = contact;
         this.province = province;
         this.city = city;
         this.district = district;
@@ -35,12 +35,12 @@ public class Mate {
         this.name = name;
     }
 
-    public String getId() {
-        return id;
+    public String getContact() {
+        return contact;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setContact(String contact) {
+        this.contact = contact;
     }
 
     public String getProvince() {

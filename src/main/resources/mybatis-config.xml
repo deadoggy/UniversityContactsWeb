@@ -10,7 +10,8 @@
                 <property name="driver" value="com.mysql.jdbc.Driver"/>
                 <property name="url" value="jdbc:mysql://localhost:3306/contacts?useUnicode=true&amp;characterEncoding=UTF-8"/>
                 <property name="username" value="contacts"/>
-                <property name="password" value="123456"/>
+                <!--<property name="password" value="123456"/>-->
+                <property name="password" value="MkossJhhTTkfidU778"/>
             </dataSource>
         </environment>
     </environments>

@@ -1,6 +1,11 @@
 function chooseItem(labelPrefix, level, obj){
     var p = document.getElementById(labelPrefix+"-" + level + "-choice");
-    p.innerText = obj.innerText;
+    if(obj.innerText.length < 7){
+        p.innerText = obj.innerText;
+    }else{
+        p.innerText = obj.innerText.substr(0,5)+'..'
+    }
+
     p.setAttribute("value", obj.getAttribute('adcode'));
     p.setAttribute("level", level);
     districtSelectChange(labelPrefix, level, obj.getAttribute('adcode'))
@@ -14,14 +19,14 @@ function refreshDistrictSelect(labelPrefix, data){
 
     //清空下面级别的选项
     if(level=='country'){
-        provinceUl.innerHTML=""; $('#'+labelPrefix+"-province-choice").text('--请选择--');
-        cityUl.innerHTML=""; $('#'+labelPrefix+"-city-choice").text('--请选择--');
-        districtUl.innerHTML=""; $('#'+labelPrefix+"-district-choice").text('--请选择--');
+        provinceUl.innerHTML=""; $('#'+labelPrefix+"-province-choice").text('--省--');
+        cityUl.innerHTML=""; $('#'+labelPrefix+"-city-choice").text('--市--');
+        districtUl.innerHTML=""; $('#'+labelPrefix+"-district-choice").text('--区--');
     }else if(level=='province'){
-        cityUl.innerHTML=""; $('#'+labelPrefix+"-city-choice").text('--请选择--');
-        districtUl.innerHTML=""; $('#'+labelPrefix+"-district-choice").text('--请选择--');
+        cityUl.innerHTML=""; $('#'+labelPrefix+"-city-choice").text('--市--');
+        districtUl.innerHTML=""; $('#'+labelPrefix+"-district-choice").text('--区--');
     }else if(level=='city'){
-        districtUl.innerHTML=""; $('#'+labelPrefix+"-district-choice").text('--请选择--');
+        districtUl.innerHTML=""; $('#'+labelPrefix+"-district-choice").text('--区--');
     }
 
     var subList = data.districtList;
@@ -67,6 +72,48 @@ function post(url, body){
     return ret;
 }
 
+function showInfoOfPoint(event){
+    var geocoder = new AMap.Geocoder({
+        radius: 1000 //范围，默认：500
+    });
+    geocoder.getAddress(event.lnglat, function(status, result) {
+        if (status === 'complete' && result.info === 'OK') {
+            console.log(result);
+            var lnglat = event.lnglat;
+            var infoWin = new AMap.InfoWindow();
+            var province = result.regeocode.addressComponent.province;
+            var city = result.regeocode.addressComponent.city;
+            var district = result.regeocode.addressComponent.district;
+
+            if('澳門特別行政區'==province){
+                province='澳门特别行政区';
+            }
+            if('香港特別行政區'==province){
+                province='香港特别行政区';
+            }
+
+            var body = {province:province};
+            if(city!=''){
+                body.city=city;
+            }
+            if(district!=''&&province!='香港特别行政区' && province!='澳门特别行政区'&&province!='新疆维吾尔自治区'){
+                body.district = district;
+            }
+            var data = post(locationUrl, body).list;
+
+            var content = "";
+            for(person in data){
+                content += data[person].name + ' ' + data[person].contact + ' '+ province+city+district + ' ';
+                if(data[person].hasOwnProperty('company')){
+                    content += data[person].company;
+                }
+                content += '<br/>';
+            }
+            infoWin.setContent(content);
+            infoWin.open(map.getMap(), new AMap.LngLat(lnglat[0], lnglat[1]));
+        }
+    });
+}
 
 function draw(layer, data){
     var color = [
@@ -86,7 +133,7 @@ function draw(layer, data){
     });
     layer.setOptions({
         style: {
-            radius: 7,
+            radius: 15,
             fill: color[Math.floor(Math.random()*8)],
             lineWidth: 1,
             stroke: '#000000',
@@ -94,47 +141,10 @@ function draw(layer, data){
         }
     });
     layer.on('click', function(event) {
-        console.log('Lnglat: ', event.lnglat) // 元素所在经纬度
-        var geocoder = new AMap.Geocoder({
-            radius: 1000 //范围，默认：500
-        });
-        geocoder.getAddress(event.lnglat, function(status, result) {
-            if (status === 'complete' && result.info === 'OK') {
-                console.log(result);
-                var lnglat = event.lnglat;
-                var infoWin = new AMap.InfoWindow();
-                var province = result.regeocode.addressComponent.province;
-                var city = result.regeocode.addressComponent.city;
-                var district = result.regeocode.addressComponent.district;
-
-                if('澳門特別行政區'==province){
-                    province='澳门特别行政区';
-                }
-                if('香港特別行政區'==province){
-                    province='香港特别行政区';
-                }
-
-                var body = {province:province};
-                if(city!=''){
-                    body.city=city;
-                }
-                if(district!=''&&province!='香港特别行政区' && province!='澳门特别行政区'&&province!='新疆维吾尔自治区'){
-                    body.district = district;
-                }
-                var data = post('/location', body).list;
-
-                var content = "";
-                for(person in data){
-                    content += data[person].id + ' ' + data[person].name + ' '+ province+city+district + ' ';
-                    if(data[person].hasOwnProperty('company')){
-                        content += data[person].company;
-                    }
-                    content += '<br/>';
-                }
-                infoWin.setContent(content);
-                infoWin.open(map.getMap(), new AMap.LngLat(lnglat[0], lnglat[1]));
-            }
-        });
+        showInfoOfPoint(event);
+    });
+    layer.on('touchstart', function(event) {
+        showInfoOfPoint(event);
     });
     layer.render();
     map.getMap().setZoomAndCenter(4, [105.542201,34.21872]);
@@ -150,7 +160,7 @@ function draw(layer, data){
 function showContent(layer, data){
 
     if(data==null){
-        data = post('/location', {}).list;
+        data = post(locationUrl, {}).list;
     }
 
     var geocoder = new AMap.Geocoder({

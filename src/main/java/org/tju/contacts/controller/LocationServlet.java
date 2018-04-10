@@ -29,7 +29,7 @@ public class LocationServlet extends HttpServlet{
             tmpLine=bodyReader.readLine();
         }
         JSONObject infoJson = JSONObject.parseObject(body.toString());
-        String id = infoJson.getString("id");
+        String contact = infoJson.getString("contact");
         String name = infoJson.getString("name");
         String province = infoJson.getString("province");
         String city = infoJson.getString("city");
@@ -38,7 +38,7 @@ public class LocationServlet extends HttpServlet{
 
         try(SqlSession session = SessionFactory.getInstance().openSession()){
             MateMapper mapper = session.getMapper(MateMapper.class);
-            mates = mapper.selectMates(new Mate(id, name, province, city, district, company));
+            mates = mapper.selectMates(new Mate(contact, name, province, city, district, company));
         }
 
         JSONObject retObj = new JSONObject();

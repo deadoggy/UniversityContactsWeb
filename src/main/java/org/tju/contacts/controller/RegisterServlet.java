@@ -9,10 +9,7 @@ import org.tju.contacts.entity.Mate;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
+import java.io.*;
 
 public class RegisterServlet extends HttpServlet {
 
@@ -28,7 +25,7 @@ public class RegisterServlet extends HttpServlet {
             tmpLine=bodyReader.readLine();
         }
         JSONObject infoJson = JSONObject.parseObject(body.toString());
-        String id = infoJson.getString("id");
+        String contact = infoJson.getString("contact");
         String name = infoJson.getString("name");
         String province = infoJson.getString("province");
         String city = infoJson.getString("city");
@@ -39,10 +36,10 @@ public class RegisterServlet extends HttpServlet {
         Boolean exists = false;
         try(SqlSession session = SessionFactory.getInstance().openSession()){
             MateMapper mapper = session.getMapper(MateMapper.class);
-            if(mapper.selectMates(new Mate(id, name, null, null, null, null)).size()!=0){
+            if(mapper.selectMates(new Mate(contact, name, null, null, null, null)).size()!=0){
                 exists=true;
             }else{
-                mapper.insertMate(new Mate(id, name, province, city, district, company));
+                mapper.insertMate(new Mate(contact, name, province, city, district, company));
                 session.commit();
             }
         }

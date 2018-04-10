@@ -1,15 +1,11 @@
 //初始化地图
+var locationUrl = '/contacts/location';
+var regiserUrl = '/contacts/register';
 var map = Loca.create('map', {
     resizeEnable: true,
     zoom:4,
     center: [105.542201,34.21872],
     //mapStyle: 'amap://styles/fresh'
-});
-map.on('mapload', function() {
-    map.getMap().plugin(['AMap.ControlBar'], function () {
-        var controlBar = new AMap.ControlBar();
-        map.getMap().addControl(controlBar);
-    });
 });
 
 var layer = Loca.visualLayer({
@@ -56,7 +52,7 @@ function searchClean(){
 
 function checkinClean(){
     $('#checkin-name').val('');
-    $('#checkin-id').val('');
+    $('#checkin-contact').val('');
     $('#checkin-province-choice').text('--请选择--');
     $('#checkin-city-choice').text('--请选择--');
     $('#checkin-district-choice').text('--请选择--');
@@ -107,14 +103,14 @@ function search(){
 
             }
         });
-    var result = post('/location', body).list;
+    var result = post(locationUrl, body).list;
     var content = "";
     for(person in result){
         var city;
         var district;
         result[person].hasOwnProperty('city')? city= result[person].city:city='';
         result[person].hasOwnProperty('district')? district= result[person].district:district='';
-        content += result[person].id + ' ' + result[person].name + ' '+ result[person].province+city+district + ' ' ;
+        content += result[person].contact + ' ' + result[person].name + ' '+ result[person].province+city+district + ' ' ;
         if(result[person].hasOwnProperty('company')){
             content+=result[person].company;
         }
@@ -146,24 +142,25 @@ $('#search-clean').bind('click', function(){
 
 $('#checkin-button').bind('click', function () {
     var name = $('#checkin-name').val();
-    var id = $('#checkin-id').val();
+    var contact = $('#checkin-contact').val();
     var province = $('#checkin-province-choice').text();
     var city = $('#checkin-city-choice').text();
     var district = $('#checkin-district-choice').text();
     var company = $('#checkin-company').val();
 
-    if(name==null || name=='' || province.indexOf('--')!=-1){
-        alert('请务必输入姓名和常住地！');
+    if(name==null || name=='' || contact==null || contact=='' ||province.indexOf('--')!=-1){
+        alert('请务必输入姓名,联系方式和常住地！');
         return;
     }
 
     var body = {
-      name: name,
-      province: province
+        name: name,
+        contact: contact,
+        province: province
     };
 
-    if(id!=null&&id!=''){
-        body.id=id;
+    if(contact!=null&&contact!=''){
+        body.contact=contact;
     }
     if(city.indexOf('--')==-1){
         body.city = city;
@@ -174,16 +171,18 @@ $('#checkin-button').bind('click', function () {
     if(company!=null&&company!=''){
         body.company = company;
     }
-    var ret = post('/register', body);
+    var ret = post(regiserUrl, body);
     if(ret.ret == 0){
-        if(ret.reason.indexOf('id exist')!=-1){
+        if(ret.reason.indexOf('exist')!=-1){
             alert('已经签到过了~');
         }else{
             alert('好像出了点问题...请稍后再试');
         }
     }else{
-        $('#checkin-cancel').trigger('click');
-        checkinClean();
-        showContent(layer, null);
+        // $('#checkin-cancel').trigger('click');
+        // checkinClean();
+        // showContent(layer, null);
+        /*ios 上点击签到后无法再点击原点了, 所以直接刷新*/
+        location.reload();
     }
 });

@@ -6,7 +6,7 @@
     <select id="selectMates" parameterType="org.tju.contacts.entity.Mate" resultType="org.tju.contacts.entity.Mate">
         SELECT * FROM t_mate
         <where>
-            <if test="id!=null">id=#{id}</if>
+            <if test="contact!=null">contact=#{contact}</if>
             <if test="name!=null">AND name=#{name}</if>
             <if test="province!=null">AND province=#{province}</if>
             <if test="city!=null">AND city=#{city}</if>
@@ -16,7 +16,7 @@
     </select>
     <insert id="insertMate" parameterType="org.tju.contacts.entity.Mate">
         INSERT INTO t_mate
-        VALUES (#{id}, #{name}, #{province}, #{city}, #{district}, #{company})
+        VALUES (#{contact}, #{name}, #{province}, #{city}, #{district}, #{company})
     </insert>
     <update id="updateMate" parameterType="org.tju.contacts.entity.Mate">
         UPDATE t_mate SET
